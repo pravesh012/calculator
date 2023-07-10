@@ -1,52 +1,99 @@
+
+
 import React, {useState, useEffect} from "react"
-import {deleteArray} from './function_page';
 
 export default function Home() {
 
-
-
+let [final, setfinal] = useState()
   //setting the inputs on the result bar//
-  let [showonTabValue, setshowonTabValue] = useState([]); //contains values numbers only
-  let [storesOrginalString, setstoresOrginalString] = useState([]);//contains array without numbers tooo
+const [showonTabValue, setshowonTabValue] = useState([]); //contains values numbers only
+const [storesOrginalString, setstoresOrginalString] = useState([]);//contains array without numbers tooo
   //
-  
+const[hideDisplay, sethideDisplay] = useState(false);
 
 
   function screenoutput(event){
-    const eventType  = event.target.innerText;
-    //bottom if user clicks the background it won't show all the spans//
-    
-
-    switch(eventType){
-      case event.target.classList.value == 'input-component-wrapper':
+  
+    //if clicked on background do nothingg.//
+    if(event.target.classList.value == 'input-component-wrapper'){
       return;
-      case 'C':
-        setshowonTabValue([]);
-        setstoresOrginalString([]);
-        return;
     };
-    //need the whole characters//
+
+    let eventType  = event.target.innerText;
+    //stores the whole string.//
     let fullStringResult = [...storesOrginalString, eventType];
     setstoresOrginalString(fullStringResult);
 
 
-    //if its a number or . //
-     if(!isNaN(Number(eventType)) || eventType ==='.'){
-      const result = [...showonTabValue, eventType];
-      setshowonTabValue(result);
-      
-
-    }
-
-    else{
-      
-    }
     
+    //bottom if user clicks the background it won't show all the spans//
+    switch(eventType){
+      case 'C':
+        setshowonTabValue([]);
+        setstoresOrginalString([]);
+        return;
+
+      };/a/
 
 
 
-  }
-  
+
+     //showing the inputs to the screen//
+      if(eventType != '='){
+        setshowonTabValue([...showonTabValue, eventType]);
+      }
+      
+      else{
+        sethideDisplay(true);
+        var unchangedData = [...storesOrginalString];
+        unchangedData[unchangedData.length - 1] == '='&&
+          unchangedData.pop();
+        
+          let fullStringofArr = storesOrginalString.join(""); 
+          const RegularExpression = /±?\d+/;
+          
+          //input x//
+          let getXStringResult = fullStringofArr.match(RegularExpression)[0];
+
+          //input y//
+          let getYStringResult = fullStringofArr.slice(getXStringResult.length);
+          //operator
+          let operator =  getYStringResult[0];
+
+          if(getXStringResult[0] === '±' ){
+            getXStringResult = getXStringResult.replace('±', '-');
+            getXStringResult = parseFloat(getXStringResult);
+          };
+
+          if(getYStringResult[1] === '±'){
+            getYStringResult = getYStringResult.replace('±', '-' );
+
+            getYStringResult = getYStringResult.replace(getYStringResult[0], '');
+            getYStringResult = parseFloat(getYStringResult);
+          };
+
+          
+
+          switch(operator){
+            case '+':
+              const x = getXStringResult + getYStringResult;
+              setfinal(x)
+           
+            
+          }
+
+        };
+
+
+
+
+
+      }
+      useEffect(()=>{
+        console.log(final);
+      })
+
+
 
 
 
@@ -54,7 +101,11 @@ export default function Home() {
     <>
       <main>
         <div className = 'calculator-main-background'>
-          <div className="Text-result-calculator">{showonTabValue}</div>
+          <div className="Text-result-calculator">
+            { showonTabValue }
+          </div>
+          <div>result: { final }</div>
+
           <div className = "input-component-wrapper" onClick = {screenoutput} >
           <span>7</span>
           <span>8</span>

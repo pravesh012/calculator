@@ -9,6 +9,7 @@ main{
 .calculator-main-background{
   width:15em;
   height: clamp(15em, 70vh, 23em);
+
 } 
 .Text-result-calculator{
   height: 15%;
@@ -17,6 +18,7 @@ main{
   text-align: end;
   padding-right: 3px;
   font-size: 1.4em;
+
   
   
 }
@@ -35,13 +37,16 @@ span{
   font-size: 27px;
   box-shadow: -5px 4px 36px -11px rgba(8,7,8,0.97);
   font-family: sans-serif;
+
   
 }
 
 span:nth-of-type(18){
   background-color: rgb(219, 69, 69);
+
 }
 
 span:hover{
   background-color: rgb(187, 187, 187);
+
 }
