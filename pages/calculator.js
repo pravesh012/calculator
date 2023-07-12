@@ -4,10 +4,10 @@ import React, {useState, useEffect} from "react"
 
 export default function Home() {
 
-let [final, setfinal] = useState()
+let [final, setfinal] = useState(0);
   //setting the inputs on the result bar//
 const [showonTabValue, setshowonTabValue] = useState([]); //contains values numbers only
-const [storesOrginalString, setstoresOrginalString] = useState([]);//contains array without numbers tooo
+const [storesOrginalString, setstoresOrginalString] = useState([]);//contains array without numbers too
   //
 const[hideDisplay, sethideDisplay] = useState(false);
 
@@ -31,6 +31,7 @@ const[hideDisplay, sethideDisplay] = useState(false);
       case 'C':
         setshowonTabValue([]);
         setstoresOrginalString([]);
+        setfinal(0)
         return;
 
       };/a/
@@ -51,48 +52,92 @@ const[hideDisplay, sethideDisplay] = useState(false);
         
           let fullStringofArr = storesOrginalString.join(""); 
           const RegularExpression = /±?\d+/;
-          
+
           //input x//
           let getXStringResult = fullStringofArr.match(RegularExpression)[0];
 
+
           //input y//
           let getYStringResult = fullStringofArr.slice(getXStringResult.length);
-          //operator
-          let operator =  getYStringResult[0];
+
+          
+          //if the second input has negitive then index at 0 else index at 1;//
+
+        
 
           if(getXStringResult[0] === '±' ){
+            
             getXStringResult = getXStringResult.replace('±', '-');
+            getXStringResult = parseFloat(getXStringResult);
+          }
+          else{
             getXStringResult = parseFloat(getXStringResult);
           };
 
+
           if(getYStringResult[1] === '±'){
+            var operator = getYStringResult[1];
             getYStringResult = getYStringResult.replace('±', '-' );
 
             getYStringResult = getYStringResult.replace(getYStringResult[0], '');
             getYStringResult = parseFloat(getYStringResult);
-          };
+          }
+          else{
+            operator = getYStringResult[0];
+            getYStringResult = getYStringResult.slice(1);
+
+
+            getYStringResult = parseFloat(getYStringResult);
+
+          }
+          
 
           
 
           switch(operator){
             case '+':
-              const x = getXStringResult + getYStringResult;
-              setfinal(x)
-           
+              setfinal(0)
+              setfinal((previous) => {
+                let finalValue  = getXStringResult + getYStringResult;
+                return previous += finalValue;
+              });
+            return;
+            case '-':
+              setfinal((previous) => {
+                let finalValue  = getXStringResult - getYStringResult;
+
+                return previous += finalValue;
+              });
+            return;
+            case 'x':
+              setfinal((previous) => {
+                let finalValue  = getXStringResult * getYStringResult;
+                return previous += finalValue;
+              });
+            return;
+            case '÷':
+              setfinal((previous) => {
+                let finalValue  = getXStringResult /getYStringResult;
+                return previous += finalValue;
+              });
+            return;
+
+            case '%':
+              setfinal((previous) => {
+                let finalValue  = getXStringResult % getYStringResult;
+                return previous += finalValue;
+              });
+            return;
+
+
+
             
           }
 
         };
 
 
-
-
-
       }
-      useEffect(()=>{
-        console.log(final);
-      })
-
 
 
 
