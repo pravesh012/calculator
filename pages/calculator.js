@@ -1,15 +1,15 @@
 
 
+
 import React, {useState, useEffect} from "react"
 
 export default function Home() {
-
-let [final, setfinal] = useState(0);
+const [showresult, setshowresult] = useState(false);
+const [final, setfinal] = useState(0);
   //setting the inputs on the result bar//
 const [showonTabValue, setshowonTabValue] = useState([]); //contains values numbers only
 const [storesOrginalString, setstoresOrginalString] = useState([]);//contains array without numbers too
   //
-const[hideDisplay, sethideDisplay] = useState(false);
 
 
   function screenoutput(event){
@@ -31,21 +31,34 @@ const[hideDisplay, sethideDisplay] = useState(false);
       case 'C':
         setshowonTabValue([]);
         setstoresOrginalString([]);
-        setfinal(0)
+        setfinal(0);
+        setshowresult(false);
         return;
 
-      };/a/
+      };
 
 
 
 
      //showing the inputs to the screen//
       if(eventType != '='){
-        setshowonTabValue([...showonTabValue, eventType]);
+        
+        if(eventType === '±'){
+          setshowonTabValue((previous)=>{
+            return [...showonTabValue, '-'];
+          });
+        }
+        else{
+          setshowonTabValue((previous)=>{
+            return [...showonTabValue, eventType];
+          });
+        }
+
       }
       
+      
       else{
-        sethideDisplay(true);
+        
         var unchangedData = [...storesOrginalString];
         unchangedData[unchangedData.length - 1] == '='&&
           unchangedData.pop();
@@ -90,50 +103,52 @@ const[hideDisplay, sethideDisplay] = useState(false);
             getYStringResult = parseFloat(getYStringResult);
 
           }
-          
 
           
 
           switch(operator){
             case '+':
-              setfinal(0)
+              
               setfinal((previous) => {
                 let finalValue  = getXStringResult + getYStringResult;
                 return previous += finalValue;
               });
-            return;
+            break;
             case '-':
               setfinal((previous) => {
                 let finalValue  = getXStringResult - getYStringResult;
 
                 return previous += finalValue;
               });
-            return;
+            break;
             case 'x':
               setfinal((previous) => {
                 let finalValue  = getXStringResult * getYStringResult;
                 return previous += finalValue;
               });
-            return;
+            break;
             case '÷':
               setfinal((previous) => {
                 let finalValue  = getXStringResult /getYStringResult;
                 return previous += finalValue;
               });
-            return;
+            break;
 
             case '%':
               setfinal((previous) => {
                 let finalValue  = getXStringResult % getYStringResult;
                 return previous += finalValue;
               });
-            return;
+            break;
 
 
 
             
           }
-
+          setshowresult((previous) =>{
+            return true;
+          })
+          
         };
 
 
@@ -147,9 +162,8 @@ const[hideDisplay, sethideDisplay] = useState(false);
       <main>
         <div className = 'calculator-main-background'>
           <div className="Text-result-calculator">
-            { showonTabValue }
+            { showresult ? final : showonTabValue }
           </div>
-          <div>result: { final }</div>
 
           <div className = "input-component-wrapper" onClick = {screenoutput} >
           <span>7</span>
